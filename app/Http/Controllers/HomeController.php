@@ -10,6 +10,6 @@ class HomeController extends Controller
 {
     function index()
     {
-        return User::with('tweets')->get();
+        return view('index');
     }
 }

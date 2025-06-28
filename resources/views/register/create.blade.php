@@ -1,21 +1,9 @@
 <x-layouts.auth>
     <div class="space-y-2">
-        <div class="input-floating w-96">
-            <input type="text" placeholder="User1234" class="input" id="floatingInput" />
-            <label class="input-floating-label" for="floatingInput">اسم المستخدم</label>
-        </div>
-        <div class="input-floating w-96">
-            <input type="email" placeholder="example@xyz.com" class="input" id="floatingInput" />
-            <label class="input-floating-label" for="floatingInput">البريد الالكتروني</label>
-        </div>
-        <div class="input-floating w-96">
-            <input type="password" placeholder="********" class="input" id="floatingInput" />
-            <label class="input-floating-label" for="floatingInput">كلمة المرور</label>
-        </div>
-        <div class="input-floating w-96">
-            <input type="password" placeholder="********" class="input" id="floatingInput" />
-            <label class="input-floating-label" for="floatingInput">تأكيد كلمة المرور</label>
-        </div>
+        <x-input label="اسم المستخدم" icon="icon-[tabler--user]" />
+        <x-input label="البريد الالكتروني" icon="icon-[tabler--mail]" type="email" />
+        <x-input label="كلمة المرور" icon="icon-[tabler--lock]" type="password" />
+        <x-input label="تأكيد كلمة المرور" icon="icon-[tabler--lock-check]" type="password" />
 
         <button class="btn btn-primary w-full mt-8">تسجيل حساب</button>
         <span>
