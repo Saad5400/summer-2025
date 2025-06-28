@@ -1,4 +1,4 @@
-<x-layouts.default>
+<x-layouts.app>
     <div class="space-y-2">
         <x-tweet />
         <div class="ms-6 ps-2 space-y-2 border-s-2">
@@ -9,4 +9,4 @@
             <x-tweet />
         </div>
     </div>
-</x-layouts.default>
+</x-layouts.app>
