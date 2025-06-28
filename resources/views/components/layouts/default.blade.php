@@ -12,7 +12,7 @@
 <body class="max-w-4xl mx-auto px-4">
     <nav class="navbar bg-base-100 rounded-box shadow-base-300/20 shadow-sm sticky top-4 z-50 border-b-2">
         <div class="flex flex-1 items-center">
-            <a class="link text-base-content link-neutral text-xl font-bold no-underline" href="#">
+            <a class="link text-base-content link-neutral text-xl font-bold no-underline" href="/">
                 عصفور
             </a>
         </div>
@@ -22,7 +22,7 @@
                     aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
                     <div class="avatar">
                         <div class="size-9.5 rounded-full">
-                            <img src="https://cdn.flyonui.com/fy-assets/avatar/avatar-1.png" alt="avatar 1" />
+                            <img src="https://elcato.sb.sa/favicon.png" alt="avatar 1" />
                         </div>
                     </div>
                 </button>
@@ -31,7 +31,7 @@
                     <li class="dropdown-header gap-2">
                         <div class="avatar">
                             <div class="w-10 rounded-full">
-                                <img src="https://cdn.flyonui.com/fy-assets/avatar/avatar-1.png" alt="avatar" />
+                                <img src="https://elcato.sb.sa/favicon.png" alt="avatar" />
                             </div>
                         </div>
                         <div>
