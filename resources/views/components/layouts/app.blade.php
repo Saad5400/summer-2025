@@ -66,4 +66,10 @@
     <div class="mt-8">
         {{ $slot }}
     </div>
+
+    <div class="textarea-floating sticky bottom-2 drop-shadow-2xl">
+        <textarea class="textarea border-t-2 border-t-primary border-t-" placeholder="Hello!!!"
+            id="textareaFloating"></textarea>
+        <label class="textarea-floating-label" for="textareaFloating">اكتب تغريدة</label>
+    </div>
 </x-layouts.default>
