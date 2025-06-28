@@ -10,6 +10,6 @@ class HomeController extends Controller
 {
     function index()
     {
-        return Tweet::all();
+        return User::with('tweets')->get();
     }
 }
