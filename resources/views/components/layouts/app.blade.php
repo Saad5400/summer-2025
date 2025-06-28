@@ -68,7 +68,7 @@
     </div>
 
     <div
-        class="border border-base-200 border-t-2 border-t-primary rounded-field sticky bottom-2 drop-shadow-2xl bg-base-100">
+        class="border border-base-200 border-t-2 border-t-primary rounded-field sticky bottom-4 drop-shadow-2xl bg-base-100">
         <div class="textarea-floating">
             <textarea class="textarea border-0 resize-none" placeholder="Hello!!!" id="textareaFloating"></textarea>
             <label class="textarea-floating-label" for="textareaFloating">اكتب تغريدة</label>
