@@ -63,13 +63,20 @@
         </div>
     </nav>
 
-    <div class="mt-8">
+    <div class="my-8">
         {{ $slot }}
     </div>
 
-    <div class="textarea-floating sticky bottom-2 drop-shadow-2xl">
-        <textarea class="textarea border-t-2 border-t-primary border-t-" placeholder="Hello!!!"
-            id="textareaFloating"></textarea>
-        <label class="textarea-floating-label" for="textareaFloating">اكتب تغريدة</label>
+    <div
+        class="border border-base-200 border-t-2 border-t-primary rounded-field sticky bottom-2 drop-shadow-2xl bg-base-100">
+        <div class="textarea-floating">
+            <textarea class="textarea border-0 resize-none" placeholder="Hello!!!" id="textareaFloating"></textarea>
+            <label class="textarea-floating-label" for="textareaFloating">اكتب تغريدة</label>
+        </div>
+        <div class="p-2">
+            <button class="btn btn-primary">
+                تغريد
+            </button>
+        </div>
     </div>
 </x-layouts.default>
