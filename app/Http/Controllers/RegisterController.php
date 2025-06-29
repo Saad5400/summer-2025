@@ -10,4 +10,9 @@ class RegisterController extends Controller
     {
         return view('register.create');
     }
+
+    function store()
+    {
+        return "POST Received";
+    }
 }

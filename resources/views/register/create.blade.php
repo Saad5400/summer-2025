@@ -1,5 +1,6 @@
 <x-layouts.auth>
-    <form class="space-y-2">
+    <form method="post" class="space-y-2">
+        @csrf
         <x-input id="name" minLength="3" label="اسم المستخدم" icon="icon-[tabler--user]" />
         <x-input id="email" label="البريد الالكتروني" icon="icon-[tabler--mail]" type="email" />
         <x-input id="password" minLength="8" label="كلمة المرور" icon="icon-[tabler--lock]" type="password" />
