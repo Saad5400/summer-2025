@@ -19,46 +19,20 @@
                     </button>
                     <ul class="dropdown-menu dropdown-open:opacity-100 hidden min-w-60" role="menu"
                         aria-orientation="vertical" aria-labelledby="dropdown-avatar">
-                        <li class="dropdown-header gap-2">
-                            <div class="avatar">
-                                <div class="w-10 rounded-full">
-                                    <img src="https://elcato.sb.sa/favicon.png" alt="avatar" />
-                                </div>
-                            </div>
-                            <div>
-                                <h6 class="text-base-content text-base font-semibold">John Doe</h6>
-                                <small class="text-base-content/50">Admin</small>
-                            </div>
-                        </li>
                         <li>
                             <a class="dropdown-item" href="#">
                                 <span class="icon-[tabler--user]"></span>
-                                My Profile
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">
-                                <span class="icon-[tabler--settings]"></span>
-                                Settings
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">
-                                <span class="icon-[tabler--receipt-rupee]"></span>
-                                Billing
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#">
-                                <span class="icon-[tabler--help-triangle]"></span>
-                                FAQs
+                                حسابي الشخصي
                             </a>
                         </li>
                         <li class="dropdown-footer gap-2">
-                            <a class="btn btn-error btn-soft btn-block" href="#">
-                                <span class="icon-[tabler--logout]"></span>
-                                Sign out
-                            </a>
+                            <form method="post" action="{{ route('logout') }}" class="w-full">
+                                @csrf
+                                <button type="submit" class="btn btn-error btn-soft btn-block">
+                                    <span class="icon-[tabler--logout]"></span>
+                                    تسجيل خروج
+                                </button>
+                            </form>
                         </li>
                     </ul>
                 </div>
