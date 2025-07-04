@@ -1,11 +1,7 @@
 <x-layouts.app>
     <div class="space-y-2">
-        <x-tweet />
-        <x-tweet />
-        <x-tweet />
-        <x-tweet />
-        <x-tweet />
-        <x-tweet />
-        <x-tweet />
+        @foreach ($tweets as $tweet)
+            <x-tweet :tweet="$tweet" />
+        @endforeach
     </div>
 </x-layouts.app>

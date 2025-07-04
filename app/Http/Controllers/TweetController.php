@@ -9,6 +9,16 @@ use Illuminate\Support\Facades\Auth;
 
 class TweetController extends Controller
 {
+    function index()
+    {
+        $tweets = Tweet::query()
+            ->orderByDesc('created_at')
+            ->limit(20)
+            ->get();
+
+        return view('index', compact('tweets'));
+    }
+
     function view() {
         return view('tweet.view');
     }
