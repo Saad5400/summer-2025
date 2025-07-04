@@ -23,3 +23,5 @@ Route::post('/logout', LogoutController::class)
 
 Route::get('/tweet/view', [TweetController::class, 'view'])
     ->name('tweet.view');
+Route::post('/tweet/create', [TweetController::class, 'store'])
+    ->name('tweet.create');

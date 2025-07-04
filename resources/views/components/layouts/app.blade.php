@@ -50,16 +50,23 @@
         {{ $slot }}
     </div>
 
-    <div
+    <form method="post" action="{{ route('tweet.create') }}"
         class="border border-base-200 border-t-2 border-t-primary rounded-field sticky bottom-4 drop-shadow-2xl bg-base-100">
+        @csrf
         <div class="textarea-floating">
-            <textarea class="textarea border-0 resize-none" placeholder="Hello!!!" id="textareaFloating"></textarea>
-            <label class="textarea-floating-label" for="textareaFloating">اكتب تغريدة</label>
+            <textarea required class="textarea border-0 resize-none" placeholder="شارك افكارك" id="content"
+                name="content"></textarea>
+            <label class="textarea-floating-label" for="content">اكتب تغريدة</label>
         </div>
-        <div class="p-2">
-            <button class="btn btn-primary btn-square">
+        <div class="p-2 pt-0">
+            @error('content')
+                <div>
+                    {{ $message }}
+                </div>
+            @enderror
+            <button type="submit" class="btn btn-primary btn-square">
                 <span class="icon-[tabler--send]"></span>
             </button>
         </div>
-    </div>
+    </form>
 </x-layouts.default>
