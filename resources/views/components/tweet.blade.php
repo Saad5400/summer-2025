@@ -2,7 +2,7 @@
     'tweet',
 ])
 
-<a href="/tweet/view">
+<a href="{{ route('tweet.view', $tweet->id) }}">
     <div class="card">
         <div class="card-body">
             <p class="mb-4">{{ $tweet->content }}</p>

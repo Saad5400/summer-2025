@@ -19,8 +19,8 @@ class TweetController extends Controller
         return view('index', compact('tweets'));
     }
 
-    function view() {
-        return view('tweet.view');
+    function view(Tweet $tweet) {
+        return view('tweet.view', compact('tweet'));
     }
 
     function store(StoreTweetRequest $request) {

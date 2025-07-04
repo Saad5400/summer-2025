@@ -46,7 +46,7 @@
         </div>
     </nav>
 
-    <div class="my-8">
+    <div class="my-8 flex-1">
         {{ $slot }}
     </div>
 

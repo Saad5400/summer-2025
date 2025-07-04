@@ -1,5 +1,5 @@
 <x-layouts.default>
-    <div class="flex flex-col justify-center items-center min-h-[100vh]">
+    <div class="flex flex-col justify-center items-center min-h-screen">
         <div class="mb-12">
             <a class="link text-base-content link-neutral text-3xl font-bold no-underline flex items-end" href="/">
                 <span>عصفور</span>
