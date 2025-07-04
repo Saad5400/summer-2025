@@ -13,7 +13,7 @@
                         aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
                         <div class="avatar">
                             <div class="size-9.5 rounded-full">
-                                <img src="https://elcato.sb.sa/favicon.png" alt="avatar 1" />
+                                <img src="/storage/{{ Auth::user()->avatar }}" alt="avatar 1" />
                             </div>
                         </div>
                     </button>

@@ -17,7 +17,8 @@
                 class="ps-3" 
                 id="{{ $id }}" 
                 name="{{ $id }}"
-                maxLength="255" {{ $attributes }} 
+                maxLength="255" 
+                {{ $attributes }} 
                 value="{{ old($id) }}"
             />
             <label class="input-floating-label" for="{{ $id }}">{{ $label }}</label>

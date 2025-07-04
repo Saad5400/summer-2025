@@ -1,6 +1,15 @@
 <x-layouts.auth>
-    <form method="post" class="space-y-2">
+    <form method="post" enctype="multipart/form-data" class="space-y-2">
         @csrf
+        <div class="max-w-sm input-floating">
+            <input type="file" required accept="image/*" class="input" id="avatar" name="avatar" />
+            <label class="input-floating-label" for="avatar">صورة الحساب</label>
+            @error('avatar')
+                <div class="text-error helper-text ps-3 mb-2">
+                    {{ $message }}
+                </div>
+            @enderror
+        </div>
         <x-input id="name" minLength="3" label="اسم المستخدم" icon="icon-[tabler--user]" />
         <x-input id="email" label="البريد الالكتروني" icon="icon-[tabler--mail]" type="email" />
         <x-input id="password" minLength="8" label="كلمة المرور" icon="icon-[tabler--lock]" type="password" />
