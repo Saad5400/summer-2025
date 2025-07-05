@@ -19,12 +19,15 @@ class TweetController extends Controller
         return view('index', compact('tweets'));
     }
 
-    function view(Tweet $tweet) {
+    function view(Tweet $tweet)
+    {
         return view('tweet.view', compact('tweet'));
     }
 
-    function store(StoreTweetRequest $request) {
-        Auth::user()->tweets()->create($request->validated());
+    function store(StoreTweetRequest $request)
+    {
+        $tweet = Auth::user()->tweets()->create($request->validated());
+        $tweet->baseTweet()->associate($tweet)->save();
 
         return redirect()->back();
     }

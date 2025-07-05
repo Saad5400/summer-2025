@@ -11,7 +11,7 @@
             @if ($tweet->id == request()->tweet?->id)
                 disabled
             @endif
-            href="{{ route('tweet.view', $tweet->id) }}" 
+            href="{{ route('tweet.view', $tweet->baseTweet->id) }}" 
             class="btn btn-text btn-square"
         >
             <span class="icon-[tabler--message]"></span>
