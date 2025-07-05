@@ -12,6 +12,7 @@ class TweetController extends Controller
     function index()
     {
         $tweets = Tweet::query()
+            ->where('parent_tweet_id', null)
             ->orderByDesc('created_at')
             ->limit(20)
             ->get();
@@ -27,7 +28,11 @@ class TweetController extends Controller
     function store(StoreTweetRequest $request)
     {
         $tweet = Auth::user()->tweets()->create($request->validated());
-        $tweet->baseTweet()->associate($tweet)->save();
+        if ($tweet->parentTweet()->exists()) {
+            $tweet->baseTweet()->associate($tweet->parentTweet->baseTweet->id)->save();
+        } else {
+            $tweet->baseTweet()->associate($tweet)->save();
+        }
 
         return redirect()->back();
     }

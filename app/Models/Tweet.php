@@ -8,6 +8,7 @@ class Tweet extends Model
 {
     protected $fillable = [
         'content',
+        'parent_tweet_id',
     ];
 
     public function user()

@@ -3,9 +3,9 @@
 ])
 
 <div class="card">
-        <div class="card-body py-4 px-7">
-            <p>{{ $tweet->content }}</p>
-        </div>
+    <div class="card-body py-4 px-7">
+        <p>{{ $tweet->content }}</p>
+    </div>
    <div class="card-actions p-4 pt-0 flex justify-between items-center">
         <a 
             @if ($tweet->id == request()->tweet?->id)
@@ -28,3 +28,10 @@
         </a>
     </div>
 </div>
+@if (request()->routeIs('tweet.view'))
+    <div class="ms-6 ps-2 space-y-2 border-s-2">
+        @foreach ($tweet->childTweets as $childTweet)
+            <x-tweet :tweet="$childTweet" />
+        @endforeach
+    </div>
+@endif
