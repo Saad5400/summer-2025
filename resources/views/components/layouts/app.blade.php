@@ -12,7 +12,7 @@
                     <button id="dropdown-scrollable" type="button" class="dropdown-toggle flex items-center"
                         aria-haspopup="menu" aria-expanded="false" aria-label="Dropdown">
                         <div class="avatar">
-                            <div class="size-9.5 rounded-full">
+                            <div class="size-9.5 rounded-box">
                                 <img src="/storage/{{ Auth::user()->avatar }}" alt="avatar 1" />
                             </div>
                         </div>

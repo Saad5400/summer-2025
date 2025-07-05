@@ -1,5 +1,5 @@
 <x-layouts.auth>
-    <form method="post" enctype="multipart/form-data" class="space-y-2">
+    <form method="post" enctype="multipart/form-data" class="space-y-3">
         @csrf
         <div class="max-w-sm input-floating">
             <input type="file" required accept="image/*" class="input" id="avatar" name="avatar" />
