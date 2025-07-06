@@ -7,15 +7,21 @@
         <p>{{ $tweet->content }}</p>
     </div>
    <div class="card-actions p-4 pt-0 flex justify-between items-center">
-        <a 
-            @if ($tweet->id == request()->tweet?->id)
-                disabled
-            @endif
-            href="{{ route('tweet.view', $tweet->baseTweet->id) }}" 
-            class="btn btn-text btn-square"
-        >
-            <span class="icon-[tabler--message]"></span>
-        </a>
+        @if (request()->routeIs('home'))
+            <a
+                href="{{ route('tweet.view', $tweet->baseTweet->id) }}" 
+                class="btn btn-text btn-square"
+            >
+                <span class="icon-[tabler--message]"></span>
+            </a>
+        @else
+            <button
+                onclick="document.querySelector(`input[name='parent_tweet_id']`).value = {{ $tweet->id }}"
+                class="btn btn-text btn-square"
+            >
+                <span class="icon-[tabler--message]"></span>
+            </button>
+        @endif
         <a class="flex btn btn-text">
             <div>
                 {{ $tweet->user->name }}
