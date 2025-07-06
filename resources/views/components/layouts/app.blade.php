@@ -17,15 +17,9 @@
                             </div>
                         </div>
                     </button>
-                    <ul class="dropdown-menu dropdown-open:opacity-100 hidden min-w-60" role="menu"
+                    <ul class="dropdown-menu dropdown-open:opacity-100 hidden min-w-60 pt-0" role="menu"
                         aria-orientation="vertical" aria-labelledby="dropdown-avatar">
-                        <li>
-                            <a class="dropdown-item" href="#">
-                                <span class="icon-[tabler--user]"></span>
-                                حسابي الشخصي
-                            </a>
-                        </li>
-                        <li class="dropdown-footer gap-2">
+                        <li class="dropdown-footer gap-2 border-t-0">
                             <form method="post" action="{{ route('logout') }}" class="w-full">
                                 @csrf
                                 <button type="submit" class="btn btn-error btn-soft btn-block">
@@ -50,24 +44,32 @@
         {{ $slot }}
     </div>
 
-    <form method="post" action="{{ route('tweet.create') }}"
-        class="border border-base-200 border-t-2 border-t-primary rounded-field sticky bottom-4 drop-shadow-2xl bg-base-100">
-        @csrf
-        <input type="hidden" name="parent_tweet_id" value="{{ request()->tweet?->id }}" />
-        <div class="textarea-floating">
-            <textarea required class="textarea border-0 resize-none" placeholder="شارك افكارك" id="content"
-                name="content"></textarea>
-            <label class="textarea-floating-label" for="content">اكتب تغريدة</label>
-        </div>
-        <div class="p-2 pt-0">
-            @error('content')
-                <div>
-                    {{ $message }}
-                </div>
-            @enderror
-            <button type="submit" class="btn btn-primary btn-square">
-                <span class="icon-[tabler--send]"></span>
-            </button>
-        </div>
-    </form>
+    @if(Auth::check())
+        <form method="post" action="{{ route('tweet.create') }}"
+            class="border border-base-200 border-t-2 border-t-primary rounded-field sticky bottom-4 drop-shadow-2xl bg-base-100">
+            @csrf
+            <input type="hidden" name="parent_tweet_id" value="{{ request()->tweet?->id }}" />
+            <div class="textarea-floating">
+                <textarea required class="textarea border-0 resize-none" placeholder="شارك افكارك" id="content"
+                    name="content"></textarea>
+                <label id="content-label" class="textarea-floating-label whitespace-normal" for="content">
+                    @if (request()->routeIs('tweet.view'))
+                        اكتب رد
+                    @else
+                        اكتب تغريدة
+                    @endif
+                </label>
+            </div>
+            <div class="p-2 pt-0">
+                @error('content')
+                    <div>
+                        {{ $message }}
+                    </div>
+                @enderror
+                <button type="submit" class="btn btn-primary btn-square">
+                    <span class="icon-[tabler--send]"></span>
+                </button>
+            </div>
+        </form>
+    @endif
 </x-layouts.default>

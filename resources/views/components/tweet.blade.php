@@ -4,7 +4,7 @@
 
 <div class="card">
     <div class="card-body py-4 px-7">
-        <p>{{ $tweet->content }}</p>
+        <p class="whitespace-pre-wrap">{{ $tweet->content }}</p>
     </div>
    <div class="card-actions p-4 pt-0 flex justify-between items-center">
         @if (request()->routeIs('home'))
@@ -16,7 +16,7 @@
             </a>
         @else
             <button
-                onclick="document.querySelector(`input[name='parent_tweet_id']`).value = {{ $tweet->id }}"
+                onclick="document.querySelector(`input[name='parent_tweet_id']`).value = {{ $tweet->id }}; document.querySelector(`label[id='content-label']`).innerHTML = `اكتب رد على: {{ mb_strimwidth($tweet->content, 0, 30, '...') }}`"
                 class="btn btn-text btn-square"
             >
                 <span class="icon-[tabler--message]"></span>

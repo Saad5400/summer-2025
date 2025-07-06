@@ -24,7 +24,7 @@ class StoreTweetRequest extends FormRequest
     {
         return [
             'parent_tweet_id' => ['nullable', 'exists:tweets,id'],
-            'content' => ['required', 'max:10000'],
+            'content' => ['required', 'max:1000'],
         ];
     }
 }
