@@ -1,0 +1,200 @@
+# nixpacks.toml — Laravel (PHP-FPM + nginx), no queues/scheduler/SSR, SQLite, with npm build
+
+[phases.setup]
+# Keep your existing pkgs (php, php extensions, nginx, node, composer, etc.) and supervisor
+nixPkgs = [
+  "...",
+  "python311Packages.supervisor",
+]
+
+[phases.install]
+cmds = [
+  "php -v && php --ini",
+  "composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction",
+  "npm ci --no-audit --no-fund --loglevel=error"
+]
+
+[phases.build]
+cmds = [
+  # Cache for prod
+  "php artisan config:cache",
+  "php artisan route:cache",
+  "php artisan view:cache",
+
+  # Frontend build (no SSR)
+  "npm run build",
+
+  # supervisor/nginx assets
+  "mkdir -p /etc/supervisor/conf.d/",
+  "cp /assets/worker-nginx.conf /etc/supervisor/conf.d/",
+  "cp /assets/worker-phpfpm.conf /etc/supervisor/conf.d/",
+  "cp /assets/supervisord.conf /etc/supervisord.conf",
+  "cp /assets/php-fpm.conf /assets/php-fpm.conf",
+  "cp /assets/nginx.conf /etc/nginx.conf",
+  "chmod +x /assets/start.sh"
+]
+
+[start]
+cmd = "/assets/start.sh"
+
+[staticAssets]
+"start.sh" = '''
+#!/bin/bash
+set -e
+
+# --- Ensure Laravel writable paths
+mkdir -p /app/storage/framework/{cache,sessions,views} \
+         /app/storage/logs \
+         /app/bootstrap/cache
+chown -R www-data:www-data /app/storage /app/bootstrap/cache || true
+chmod -R ug+rwX /app/storage /app/bootstrap/cache
+
+# --- SQLite (DB_CONNECTION=sqlite expected in env/.env)
+mkdir -p /app/storage/database
+touch /app/storage/database/database.sqlite
+chown -R www-data:www-data /app/storage/database || true
+chmod 664 /app/storage/database/database.sqlite || true
+
+# Storage symlink (idempotent)
+php artisan storage:link || true
+
+# Clear any stale compiled views
+php artisan view:clear || true
+
+# Migrate (safe no-op if none)
+php artisan migrate --force || true
+
+# Final app optimize
+php artisan optimize
+
+# Test nginx config
+nginx -t -c /etc/nginx.conf
+
+# Start supervisor (nginx + php-fpm)
+exec supervisord -c /etc/supervisord.conf -n
+'''
+
+"supervisord.conf" = '''
+[unix_http_server]
+file=/assets/supervisor.sock
+
+[supervisord]
+logfile=/var/log/supervisord.log
+logfile_maxbytes=50MB
+logfile_backups=5
+loglevel=info
+pidfile=/assets/supervisord.pid
+nodaemon=false
+minfds=1024
+minprocs=100
+
+[rpcinterface:supervisor]
+supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+
+[supervisorctl]
+serverurl=unix:///assets/supervisor.sock
+
+[include]
+files = /etc/supervisor/conf.d/*.conf
+'''
+
+"worker-nginx.conf" = '''
+[program:nginx]
+command=nginx -c /etc/nginx.conf
+autostart=true
+autorestart=true
+stdout_logfile=/dev/stdout
+stderr_logfile=/dev/stderr
+stdout_logfile_maxbytes=0
+stderr_logfile_maxbytes=0
+'''
+
+"worker-phpfpm.conf" = '''
+[program:php-fpm]
+command=php-fpm -y /assets/php-fpm.conf -F
+autostart=true
+autorestart=true
+stdout_logfile=/var/log/worker-phpfpm.log
+stderr_logfile=/var/log/worker-phpfpm.log
+'''
+
+"php-fpm.conf" = '''
+[www]
+listen = 127.0.0.1:9000
+user = www-data
+group = www-data
+listen.owner = www-data
+listen.group = www-data
+
+pm = dynamic
+pm.max_children = 30
+pm.start_servers = 6
+pm.min_spare_servers = 3
+pm.max_spare_servers = 12
+clear_env = no
+
+; Production tweaks
+php_admin_value[memory_limit] = 512M
+php_admin_value[max_execution_time] = 60
+php_admin_value[max_input_time] = 60
+php_admin_value[post_max_size] = 64M
+php_admin_value[upload_max_filesize] = 32M
+
+; OPcache
+php_admin_value[opcache.enable] = 1
+php_admin_value[opcache.validate_timestamps] = 0
+php_admin_value[opcache.max_accelerated_files] = 20000
+php_admin_value[opcache.memory_consumption] = 128
+'''
+
+"nginx.conf" = '''
+user www-data www-data;
+worker_processes auto;
+daemon off;
+
+events { worker_connections 4096; }
+
+http {
+  include       $!{nginx}/conf/mime.types;
+  default_type  application/octet-stream;
+  log_format    main '$remote_addr - $remote_user [$time_local] $status '
+                    '"$request" $body_bytes_sent "$http_referer" '
+                    '"$http_user_agent" "$http_x_forwarded_for"';
+  access_log    /var/log/nginx-access.log main;
+  error_log     /var/log/nginx-error.log;
+  sendfile      on;
+  tcp_nopush    on;
+
+  server {
+    listen ${PORT};
+    listen [::]:${PORT};
+    server_name _;
+
+    root /app/public;
+
+    add_header X-Content-Type-Options "nosniff";
+    client_max_body_size 35M;
+
+    index index.php;
+    charset utf-8;
+
+    location / {
+      try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location = /robots.txt  { access_log off; log_not_found off; }
+
+    error_page 404 /index.php;
+
+    location ~ \.php$ {
+      fastcgi_pass 127.0.0.1:9000;
+      fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+      include $!{nginx}/conf/fastcgi_params;
+      include $!{nginx}/conf/fastcgi.conf;
+    }
+
+    location ~ /\.(?!well-known).* { deny all; }
+  }
+}
+'''
