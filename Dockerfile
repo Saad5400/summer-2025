@@ -3,6 +3,7 @@ FROM node:20 AS frontend
 
 WORKDIR /app
 
+# install npm deps
 COPY package*.json vite.config.* postcss.config.* tailwind.config.* ./
 RUN npm install
 
@@ -15,12 +16,10 @@ FROM composer:2 AS vendor
 
 WORKDIR /app
 
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
-
-# copy the rest of the source so scripts like post-install can run if needed
+# copy full app (so artisan & configs exist)
 COPY . .
-RUN composer dump-autoload --optimize
+
+RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
 
 
 # Stage 3 — Final FrankenPHP runtime image
@@ -32,10 +31,10 @@ WORKDIR /app
 # Use PHP production INI
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
-# Copy application source code
+# Copy app source
 COPY . .
 
-# Copy vendor folder from composer stage
+# Copy vendor from composer stage
 COPY --from=vendor /app/vendor ./vendor
 
 # Copy frontend build artifacts
