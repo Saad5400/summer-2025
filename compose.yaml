@@ -13,7 +13,7 @@ services:
     volumes:
       - caddy_data:/data
       - caddy_config:/config
-      - laravel_storage:/app/storage   # persists logs, files, SQLite DB
+      - laravel_storage:/app/storage   # persists logs/files/sqlite
 
 volumes:
   caddy_data:
