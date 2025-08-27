@@ -1,8 +1,14 @@
-FROM dunglas/frankenphp
+FROM dunglas/frankenphp:latest
 
 ENV SERVER_NAME=:80
+WORKDIR /app
 
-# Enable PHP production settings
+# Use PHP production INI
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
+# Copy your Laravel app into the image
 COPY . /app
+
+# Ensure writable dirs
+RUN mkdir -p storage bootstrap/cache \
+ && chown -R www-data:www-data storage bootstrap/cache
