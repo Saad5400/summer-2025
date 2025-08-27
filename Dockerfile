@@ -3,20 +3,28 @@ FROM node:20 AS frontend
 
 WORKDIR /app
 
-# Copy only package files first (better cache)
 COPY package*.json vite.config.* postcss.config.* tailwind.config.* ./
-
 RUN npm install
 
-# Copy the rest of the source (for assets)
 COPY . .
-
-# Build assets for production (goes to public/build by default)
 RUN npm run build
 
 
-# Stage 2 — Build PHP dependencies with Composer
-FROM dunglas/frankenphp:latest AS php
+# Stage 2 — Install PHP dependencies with Composer
+FROM composer:2 AS vendor
+
+WORKDIR /app
+
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+
+# copy the rest of the source so scripts like post-install can run if needed
+COPY . .
+RUN composer dump-autoload --optimize
+
+
+# Stage 3 — Final FrankenPHP runtime image
+FROM dunglas/frankenphp:latest
 
 ENV SERVER_NAME=:80
 WORKDIR /app
@@ -24,15 +32,13 @@ WORKDIR /app
 # Use PHP production INI
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
-# Copy composer files first
-COPY composer.json composer.lock ./
-
-RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
-
-# Copy application source
+# Copy application source code
 COPY . .
 
-# Copy frontend build results from stage 1
+# Copy vendor folder from composer stage
+COPY --from=vendor /app/vendor ./vendor
+
+# Copy frontend build artifacts
 COPY --from=frontend /app/public/build ./public/build
 
 # Ensure writable dirs
