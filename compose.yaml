@@ -1,0 +1,21 @@
+services:
+  php:
+    build: .
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      SERVER_NAME: ":80"
+      DB_CONNECTION: sqlite
+      DB_DATABASE: /app/storage/database/database.sqlite
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+      - laravel_storage:/app/storage   # persists logs, files, SQLite DB
+
+volumes:
+  caddy_data:
+  caddy_config:
+  laravel_storage:
